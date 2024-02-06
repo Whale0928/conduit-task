@@ -1,4 +1,9 @@
-public enum Operation {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum Operation implements Operator {
     ADD("+") {
         @Override
         public double apply(double x, double y) {
@@ -20,22 +25,14 @@ public enum Operation {
     DIVIDE("/") {
         @Override
         public double apply(double x, double y) {
-            if (y == 0) throw new ArithmeticException("Division by zero.");
+            if (y == 0) {
+                throw new ArithmeticException("0으로 나눌 수 없습니다.");
+            }
             return x / y;
         }
     };
 
     private final String symbol;
-
-    Operation(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public abstract double apply(double x, double y);
-
-    public String getSymbol() {
-        return symbol;
-    }
 
     public static Operation fromSymbol(String symbol) {
         for (Operation op : values()) {
@@ -43,6 +40,6 @@ public enum Operation {
                 return op;
             }
         }
-        throw new IllegalArgumentException("Not an appropriate operator: " + symbol);
+        throw new IllegalArgumentException("적합하지 않은 기호입니다. : " + symbol);
     }
 }
