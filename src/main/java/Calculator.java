@@ -1,6 +1,13 @@
 public class Calculator {
-    public double calculate(Double value1, String operatorSymbol, Double value2) {
-        Operation operation = Operation.fromSymbol(operatorSymbol);
-        return operation.apply(value1, value2);
+
+    public double calculate(InputObject inputObject) {
+
+        Operation symbol = inputObject.operatorSymbol;
+
+        if (Operation.isUnary(symbol.getSymbol())) {
+            return symbol.apply(inputObject.value1);
+        } else {
+            return symbol.apply(inputObject.value1, inputObject.value2);
+        }
     }
 }

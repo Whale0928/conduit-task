@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,8 +16,11 @@ class PromptUtilsTest {
     @DisplayName("promptDouble 메소드는 사용자로부터 숫자를 입력받아 반환한다")
     @Test
     void promptDouble() {
-        systemIn("3\n");
-        double result = promptUtils.promptDouble(new Scanner(System.in), "계산할 숫자를 입력하세요:");
+
+        systemIn("3");
+
+        double result = promptUtils.promptDouble("계산할 숫자를 입력하세요:");
+
         assertEquals(3, result);
     }
 
@@ -26,7 +28,7 @@ class PromptUtilsTest {
     @Test
     void promptOperator() {
         systemIn("+\n");
-        String result = promptUtils.promptOperator(new Scanner(System.in));
+        String result = promptUtils.promptOperator();
         assertEquals("+", result);
     }
 
@@ -36,7 +38,7 @@ class PromptUtilsTest {
         systemIn("abc\n3\n");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        double result = promptUtils.promptDouble(new Scanner(System.in), "계산할 숫자를 입력하세요:");
+        double result = promptUtils.promptDouble("계산할 숫자를 입력하세요:");
         assertTrue(outContent.toString().contains("적절한 숫자를 입력해주세요."));
         assertEquals(3, result);
     }
@@ -47,9 +49,16 @@ class PromptUtilsTest {
         systemIn("%\n+\n");
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
-        String result = promptUtils.promptOperator(new Scanner(System.in));
-        assertTrue(outContent.toString().contains("적절한 연산자를 입력해주세요. (+, -, *, / 중 하나)"));
+        String result = promptUtils.promptOperator();
+        assertTrue(outContent.toString().contains("적절한 연산자를 입력해주세요. (+, -, *, / , cos , sin 중 하나)"));
         assertEquals("+", result);
+    }
+
+    @DisplayName("isCosOrSin 메소드는 cos 또는 sin 연산자를 입력받으면 true를 반환한다")
+    @Test
+    void isCosOrSin() {
+        assertTrue(promptUtils.isCosOrSin("cos"));
+        assertTrue(promptUtils.isCosOrSin("sin"));
     }
 
     private void systemIn(String input) {

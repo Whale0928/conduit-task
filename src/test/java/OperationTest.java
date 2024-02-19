@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OperationTest {
 
@@ -49,5 +50,22 @@ class OperationTest {
     @Test
     void fromInvalidSymbolThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> Operation.fromSymbol("%"));
+    }
+
+    @DisplayName("sin 연산을 할 때 올바른 결과를 반환한다")
+    @Test
+    void sinOperation() {
+        assertEquals(Math.sin(45.0), Operation.SIN.apply(45.0));
+    }
+
+    @DisplayName("옯바른 연산자를 입력했을 때 true를 반환한다")
+    @Test
+    void isOperator() {
+        assertTrue(Operation.isOperator("+"));
+        assertTrue(Operation.isOperator("-"));
+        assertTrue(Operation.isOperator("*"));
+        assertTrue(Operation.isOperator("/"));
+        assertTrue(Operation.isOperator("cos"));
+        assertTrue(Operation.isOperator("sin"));
     }
 }
